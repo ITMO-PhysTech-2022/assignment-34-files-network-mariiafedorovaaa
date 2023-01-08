@@ -160,7 +160,8 @@ class Editor:
         if not silent:
             if result is not None:
                 self.report(repr(result))
-            elif self.display and 'show' in self.commands and cmd != 'show':
+            elif self.display and data.lines is not None \
+                    and 'show' in self.commands and cmd != 'show':
                 from_line = max(0, data.y - self.display_margin)
                 to_line = min(len(data) - 1, data.y + self.display_margin)
                 self.execute(f'show {from_line} {to_line}', silent=True)
