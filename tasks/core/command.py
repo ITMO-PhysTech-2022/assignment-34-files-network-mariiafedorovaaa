@@ -56,3 +56,11 @@ class GreedyCommand(Command):
 
     def parse(self, arg_line: str):
         return [arg_line]
+
+
+class ShowDummy(Command):
+    def __init__(self, f: Callable):
+        super().__init__(f)
+
+    def parse(self, arg_line: str):
+        return list(map(int, arg_line.split()))

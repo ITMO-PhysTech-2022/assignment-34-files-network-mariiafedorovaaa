@@ -139,9 +139,15 @@ class Editor:
     def use_vars(self, names: Iterable[str]):
         return self._VarFormatter(self, names)
 
+    class _SafeDict(dict):
+        def __missing__(self, key):
+            return '{' + key + '}'
+
     @property
     def var_formatter(self):
-        return {name: self.vars.get(name) for name in self.active_vars}
+        return Editor._SafeDict(
+            {name: self.vars.get(name) for name in self.active_vars}
+        )
 
     def execute(self, line: str, *, silent: bool = False):
         cmd = line.split(maxsplit=1)[0]
@@ -149,7 +155,7 @@ class Editor:
             return self.report('Некорректная команда, наберите `help` для вывода списка команд')
 
         command = self.commands[cmd]
-        arg_line = line.removeprefix(cmd).format(**self.var_formatter)
+        arg_line = line.removeprefix(cmd).format_map(self.var_formatter)
         if arg_line.startswith(' '):
             arg_line = arg_line.removeprefix(' ')
         if not command.validate_arg_count(arg_line):

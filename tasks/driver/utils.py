@@ -7,7 +7,7 @@ from tasks.core import data, main
 @decorator
 def requires_data(cmd, *args):
     if not data:
-        main.report('No data currently in use')
+        main.report('В редакторе не открыт файл')
         return
     return cmd(*args)
 
