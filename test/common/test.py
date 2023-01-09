@@ -59,7 +59,7 @@ class TestBase:
 
     def __init__(self, spec, test_name, gen=None, check=None):
         self._gen_id.id = 0
-        
+
         self.path: pathlib.Path | None = None
         self.spec: Callable | None = None
         self.test_name = test_name
@@ -138,8 +138,12 @@ class TestBase:
             log.write(_trim_message(f'''
             ========================================
             Неверный ответ на тесте {test_description}
-            {msg}
-            
+            {msg}'''))
+
+            if test is None:
+                return
+            log.write('\n')
+            log.write(_trim_message(f'''
             Входные данные:
             - args      : {test.args}
             - kwargs    : {test.kwargs}
@@ -169,7 +173,8 @@ class TestBase:
 
             if test is None:
                 return
-            log.write(_trim_message(f'''\n
+            log.write('\n')
+            log.write(_trim_message(f'''
             Входные данные:
             - args      : {test.args}
             - kwargs    : {test.kwargs}

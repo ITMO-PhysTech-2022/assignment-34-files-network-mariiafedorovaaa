@@ -86,11 +86,10 @@ class Process:
     def exitcode(self):
         return self.process.poll()
 
-    def full_log(self, stream_id: int):
+    def remaining_log(self, stream_id: int):
         if self.process.poll() is None:
             return None
         stream = self.process.stdout if stream_id == 0 else self.process.stderr
-        stream.seek(0)
         return stream.read()
 
 

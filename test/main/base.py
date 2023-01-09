@@ -15,13 +15,13 @@ def config(show: bool, margin: int, prefix: str):
 
 
 def cleanup(runner: TestBase, process: Process):
-    spec_stop = timeout(process.wait, 2)
-    spec_stop.__name__ = 'main.stop'
+    spec_stop = timeout(process.wait, 1)
+    spec_stop.__name__ = 'main.forcestop'
     runner.set_spec(spec_stop)
     runner.run(runner.manual().just_returns())
 
     if process.exitcode() != 0:
-        runner.report_re(f'1:runs/exitcode', None, process.full_log(1))
+        runner.report_re(f'{runner.test_name}/exitcode', None, process.remaining_log(1))
         pytest.fail(f'Процесс завершился с ошибкой')
 
     runner.cleanup()

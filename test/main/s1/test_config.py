@@ -21,7 +21,7 @@ class TestConfig:
         with tmpcd(root_directory()), tmpreplace('tasks/config.json') as config_file:
             config_file.write(json.dumps(config(False, -1, prefix), indent=2))
             with process:
-                spec_run = timeout(process.handler, 5)
+                spec_run = timeout(process.handler, 3)
                 spec_run.__name__ = 'run.exit'
                 runner = create(spec_run, '1.1#config.prefix')
                 runner.run(runner.manual('exit', 1).returns([f'{prefix} ']))
@@ -40,8 +40,8 @@ class TestConfig:
         with tmpcd(root_directory()), tmpreplace('tasks/config.json') as config_file:
             config_file.write(json.dumps(config(True, margin, '$'), indent=2))
             with process:
-                spec_run = timeout(process.handler, 5)
-                spec_run.__name__ = 'run.cursor.show'
+                spec_run = timeout(process.handler, 3)
+                spec_run.__name__ = 'run.cursor.home+show'
                 runner = create(spec_run, '1.1#config.display')
                 runner.multitest(
                     runner.manual(f'exec main.commands["show"] = {show_transform(show_src)}', 1).just_returns(),
@@ -53,6 +53,29 @@ class TestConfig:
                     runner.manual('home', 1).returns([f'$  > {show(50 - margin, 50 + margin)}\n']),
                     runner.manual('exec data.cursor = (97, 0)', 1).just_returns(),
                     runner.manual('home', 1).returns([f'$  > {show(97 - margin, min(97 + margin, 99))}\n']),
+                )
+
+            cleanup(runner, process)
+
+    def test_no_display(self):
+        process = spawn()
+        with tmpcd(root_directory()), tmpreplace('tasks/config.json') as config_file:
+            config_file.write(json.dumps(config(False, -1, '$'), indent=2))
+            with process:
+                spec_run = timeout(process.handler, 3)
+                spec_run.__name__ = 'run.cursor.home-show'
+                runner = create(spec_run, '1.1#config.nodisplay')
+                runner.multitest(
+                    runner.manual('exec data.lines = [""] * 100', 1).just_returns(),
+
+                    runner.manual('exec data.cursor = (0, 0)', 1).returns(['$  > \'Done\'\n']),
+                    runner.manual('home', 0).just_returns(),
+                    runner.manual('exec data.cursor = (50, 0)', 1).returns(['$ $  > \'Done\'\n']),
+                    runner.manual('home', 0).just_returns(),
+                    runner.manual('exec data.cursor = (97, 0)', 1).returns(['$ $  > \'Done\'\n']),
+                    runner.manual('home', 0).just_returns(),
+
+                    runner.manual('exit', 1).returns(['$ $ '])
                 )
 
             cleanup(runner, process)

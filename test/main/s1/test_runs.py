@@ -11,7 +11,7 @@ class TestRuns:
     def test_runs(self):
         process = spawn(auto_exit=False)
         with process:
-            spec_run = timeout(process.handler, 5)
+            spec_run = timeout(process.handler, 3)
             spec_run.__name__ = 'run.exit'
             runner = create(spec_run, '1.0#runs')
             runner.run(runner.manual('exit', 1).just_returns())
