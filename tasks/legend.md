@@ -3,8 +3,8 @@
 ### Подготовка
 
 1. Поставьте [`Python 3.11`](https://www.python.org/downloads/)
-2. Поставьте библиотеки `decorator`, `requests`
-    * `pip3 install decorator requests` или
+2. Поставьте библиотеки `decorator`, `requests` и **`pytest`**
+    * `pip3 install decorator requests pytest` или
     * Настройки &rightarrow; `Project: assignment-...` &rightarrow; `Python Interpreter` &rightarrow;
       выбрать `Python 3.11` &rightarrow; нажать `+` над списком пакетов, установить
 3. Установите папку `tasks` как `Sources Root`, папку `test` как `Test Sources Root`,
