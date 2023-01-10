@@ -1,7 +1,7 @@
 # Custom
 test.log
 testlog/
-resourses/tmp/
+resources/tmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
