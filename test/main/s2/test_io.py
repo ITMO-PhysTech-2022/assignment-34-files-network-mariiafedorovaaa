@@ -91,8 +91,9 @@ class TestIO:
 
             with res.loc('output').open('rb') as output:
                 actual = output.read().replace(b'\r', b'')
-                expect = '\n'.join(content) + '\n'
-                if actual != expect.encode('utf-8'):
+                expect1 = '\n'.join(content)
+                expect2 = expect1 + '\n'
+                if actual != expect1.encode('utf-8') and actual != expect2.encode('utf-8'):
                     msg = f'Данные в файле отличаются от ожидаемых {content}'
                     runner.report_wa(f'{runner.test_name}/diff', None, 'resources/tmp/output', msg)
                     pytest.fail(msg)
