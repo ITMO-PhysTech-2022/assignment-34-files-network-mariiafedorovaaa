@@ -8,49 +8,36 @@ from decorator import decorator
 from test.common.test import create, timeout, root_directory
 from test.common.mock.fs import tmpcd, tmpfile
 from test.main.process import spawn
-from test.main.base import config, cleanup, show_transform
+from test.main.base import config, cleanup
 
 
-class TestConfig:
-    @pytest.mark.parametrize('prefix', ['$', '@', ':('])
-    def test_prefix(self, prefix):
-        process = spawn(auto_exit=False)
+class TestExample:
+    def test_example(self):
+        process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
-            config_file.write(json.dumps(config(False, -1, prefix), indent=2))
+            config_file.write(json.dumps(config(False, -1, '$'), indent=2))
             with process:
                 spec_run = timeout(process.handler, 3)
-                spec_run.__name__ = 'run.exit'
-                runner = create(spec_run, '1.1#prefix')
-                runner.run(runner.manual('exit', 1).returns([f'{prefix} ']))
+                spec_run.__name__ = 'run.example'
+                runner = create(spec_run, '2.0#example')
+                runner.run(runner.manual('example', 1).returns(
+                    [f'$  > Команда-пример, выводит это сообщение\n']
+                ))
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('margin', [0, 3, 10])
-    @pytest.mark.parametrize('show', [
-        lambda x, y: x + y,
-        lambda x, y: f"{x}:{y}"
-    ])
-    def test_display(self, show, margin):
+    @pytest.mark.parametrize('arg', [-3, 0, 1, 3, 17, 77])
+    def test_example_square(self, arg):
         process = spawn()
-        show_src = inspect.getsource(show).strip().removesuffix(',')
-
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
-            config_file.write(json.dumps(config(True, margin, '$'), indent=2))
+            config_file.write(json.dumps(config(False, -1, '$'), indent=2))
             with process:
                 spec_run = timeout(process.handler, 3)
-                spec_run.__name__ = 'run.cursor.home+show'
-                runner = create(spec_run, '1.1#display')
-                runner.multitest(
-                    runner.manual(f'exec main.commands["show"] = {show_transform(show_src)}', 1).just_returns(),
-                    runner.manual('exec data.lines = [""] * 100', 1).just_returns(),
-
-                    runner.manual('exec data.cursor = (0, 0)', 1).just_returns(),
-                    runner.manual('home', 1).returns([f'$  > {show(0, margin)}\n']),
-                    runner.manual('exec data.cursor = (50, 0)', 1).just_returns(),
-                    runner.manual('home', 1).returns([f'$  > {show(50 - margin, 50 + margin)}\n']),
-                    runner.manual('exec data.cursor = (97, 0)', 1).just_returns(),
-                    runner.manual('home', 1).returns([f'$  > {show(97 - margin, min(97 + margin, 99))}\n']),
-                )
+                spec_run.__name__ = 'run.example-square'
+                runner = create(spec_run, '2.0#example-square')
+                runner.run(runner.manual(f'example_square {arg}', 1).returns(
+                    [f'$  > {arg ** 2}\n']
+                ))
 
             cleanup(runner, process)
 

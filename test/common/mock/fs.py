@@ -6,10 +6,9 @@ from pathlib import Path
 
 
 class _TmpDir:
-    def __init__(self, name: str = 'tmp', keep: bool = False):
-        self.name = name
+    def __init__(self, path: str | os.PathLike = 'tmp', keep: bool = False):
+        self.path = Path(path).absolute()
         self.keep = keep
-        self.path = Path(os.getcwd(), name)
 
         self.clean = self.path
         for parent in self.path.parents:
@@ -42,18 +41,18 @@ class _TmpChdir:
         os.chdir(self.origin)
 
 
-class _TmpReplace:
+class _TmpFile:
     def __init__(self, filename: str | os.PathLike):
         self.path = Path(filename)
-        if not self.path.exists():
-            raise FileNotFoundError(self.path.absolute())
-        with open(self.path, 'rb') as old_file:
-            self.data = old_file.read()
+        self.data: bytes | None = None
+        if self.path.exists():
+            with open(self.path, 'rb') as old_file:
+                self.data = old_file.read()
         self.file = None
 
     class FileHandler:
         def __init__(self, path: Path, data: bytes | None):
-            self.path = path
+            self.path = path.absolute()
             self.data = data
 
         def write(self, data: bytes | str, append: bool = False):
@@ -66,13 +65,15 @@ class _TmpReplace:
             shutil.copy(from_path, self.path)
 
     def __enter__(self):
-        return _TmpReplace.FileHandler(self.path, self.data)
+        return _TmpFile.FileHandler(self.path, self.data)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        with open(self.path, 'wb') as file:
-            file.write(self.data)
-
+        if self.data is not None:
+            with open(self.path, 'wb') as file:
+                file.write(self.data)
+        else:
+            os.remove(self.path)
 
 tmpdir = _TmpDir
 tmpcd = _TmpChdir
-tmpreplace = _TmpReplace
+tmpfile = _TmpFile

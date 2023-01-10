@@ -140,18 +140,22 @@ class TestBase:
             Неверный ответ на тесте {test_description}
             {msg}'''))
 
-            if test is None:
-                return
             log.write('\n')
-            log.write(_trim_message(f'''
-            Входные данные:
-            - args      : {test.args}
-            - kwargs    : {test.kwargs}
-            
-            Результат:
-            - ожидалось : {test.answer}
-            - получено  : {result}
-            \n'''))
+            if test is None:
+                log.write(_trim_message(f'''
+                Результат (получено):
+                - {result}
+                '''))
+            else:
+                log.write(_trim_message(f'''
+                Входные данные:
+                - args      : {test.args}
+                - kwargs    : {test.kwargs}
+                
+                Результат:
+                - ожидалось : {test.answer}
+                - получено  : {result}
+                '''))
 
     def report_tl(self, test_description, test):
         with open(self.path, 'a', encoding='utf-8') as log:
@@ -162,7 +166,7 @@ class TestBase:
             Входные данные:
             - args      : {test.args}
             - kwargs    : {test.kwargs}
-            \n'''))
+            '''))
 
     def report_re(self, test_description, test, ex):
         with open(self.path, 'a', encoding='utf-8') as log:
@@ -178,7 +182,7 @@ class TestBase:
             Входные данные:
             - args      : {test.args}
             - kwargs    : {test.kwargs}
-            \n'''))
+            '''))
 
     def cleanup(self):
         if not os.listdir(self.path.parent):

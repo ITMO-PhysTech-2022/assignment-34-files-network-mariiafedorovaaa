@@ -13,7 +13,7 @@ class TestRuns:
         with process:
             spec_run = timeout(process.handler, 3)
             spec_run.__name__ = 'run.exit'
-            runner = create(spec_run, '1.0#runs')
+            runner = create(spec_run, '1.0')
             runner.run(runner.manual('exit', 1).just_returns())
 
         cleanup(runner, process)

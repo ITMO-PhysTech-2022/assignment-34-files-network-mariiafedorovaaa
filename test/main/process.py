@@ -11,7 +11,7 @@ from subprocess import Popen, PIPE
 
 import re
 
-from test.common.mock.fs import tmpcd, tmpreplace
+from test.common.mock.fs import tmpcd, tmpfile
 from test.common.test import root_directory, timeout
 
 _dev_mode = '''
@@ -23,7 +23,7 @@ def _cmd_exec(line: str):
 @greedy
 def _cmd_eval(line: str):
     result = eval(line)
-    return f'{result=}'
+    return result
     
 @greedy
 def _cmd_debug(line: str):
@@ -38,6 +38,7 @@ class Process:
         self.process: Popen | None = None
         self.auto_exit = auto_exit
         self.root = root_directory()
+        self.resources = self.root / 'resources'
         os.environ['PYTHONIOENCODING'] = 'utf-8'
         os.environ['PYTHONPATH'] = f'{os.environ["PYTHONPATH"]}{os.pathsep}{self.root}'
 
@@ -48,7 +49,7 @@ class Process:
             if not re.findall(r'tasks[^\'"]+config\.json', main):
                 self.root /= 'tasks'
                 self.path = 'main.py'
-        self.tmpcommands = tmpreplace(self.commands)
+        self.tmpcommands = tmpfile(self.commands)
 
     def __enter__(self):
         commands = self.tmpcommands.__enter__()
