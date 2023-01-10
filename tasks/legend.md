@@ -166,7 +166,7 @@ $ save ../resources/tmp/config.json
 $ read config.json
  > Прочитано 7 строк
 $ total
- > (6, 67)
+ > (7, 67)
 $ cursor
  > (0, 0)
 $ linewidth 0
