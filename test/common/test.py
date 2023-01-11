@@ -7,6 +7,7 @@ import pathlib
 
 import pytest
 import re
+from datetime import datetime, timezone
 
 from copy import deepcopy
 from threading import Thread, Event
@@ -60,9 +61,22 @@ class TestBase:
     def __init__(self, spec, test_name, gen=None, check=None):
         self._gen_id.id = 0
 
-        self.path: pathlib.Path | None = None
-        self.spec: Callable | None = None
         self.test_name = test_name
+        self.base_path = TestBase._root_path / self.test_name
+        if self.base_path.exists():
+            mod_time = datetime.fromtimestamp(os.stat(self.base_path).st_mtime) 
+            if mod_time < pytest.start_time:
+                for item in os.listdir(self.base_path):
+                    full_path = self.base_path / item
+                    if full_path.is_dir():
+                        shutil.rmtree(full_path)
+                    else:
+                        os.remove(full_path)
+        self.base_path.mkdir(parents=True, exist_ok=True)
+
+        self.path: pathlib.Path | None = None
+        self.current_log_id = -1
+        self.spec: Callable | None = None
 
         self.default_gen = gen
         self.check = TestBase._default_check if check is None else check
@@ -70,11 +84,7 @@ class TestBase:
 
     def set_spec(self, spec):
         self.spec = spec
-        self.path = TestBase._root_path / self.test_name
-        self.path.mkdir(parents=True, exist_ok=True)
-        self.path /= (spec.__name__ + '.log')
-        if self.path.exists():
-            os.remove(self.path)
+        self.path = self.base_path / spec.__name__
 
     class _Test:
         def __init__(self, args, kwargs, answer):
@@ -133,8 +143,18 @@ class TestBase:
         for test in tests:
             self.run(test)
 
+    def _file_name(self):
+        index = 1
+        while True:
+            path = f'{self.path}~{index:02d}.log'
+            if not os.path.exists(path):
+                break
+            index += 1
+        self.current_log_id = index
+        return path
+
     def report_wa(self, test_description, test, result, msg):
-        with open(self.path, 'a', encoding='utf-8') as log:
+        with open(self._file_name(), 'a', encoding='utf-8') as log:
             log.write(_trim_message(f'''
             ========================================
             Неверный ответ на тесте {test_description}
@@ -158,7 +178,7 @@ class TestBase:
                 '''))
 
     def report_tl(self, test_description, test):
-        with open(self.path, 'a', encoding='utf-8') as log:
+        with open(self._file_name(), 'a', encoding='utf-8') as log:
             log.write(_trim_message(f'''
             ========================================
             Превышено время работы на тесте {test_description}
@@ -169,7 +189,7 @@ class TestBase:
             '''))
 
     def report_re(self, test_description, test, ex):
-        with open(self.path, 'a', encoding='utf-8') as log:
+        with open(self._file_name(), 'a', encoding='utf-8') as log:
             log.write(_trim_message(f'''
             ========================================
             Ошибка в работе решения на тесте {test_description}''') +

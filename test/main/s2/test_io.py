@@ -1,3 +1,5 @@
+import shutil
+
 import pytest
 
 import json
@@ -91,7 +93,10 @@ class TestIO:
                 expect2 = expect1 + '\n'
                 if actual != expect1.encode('utf-8') and actual != expect2.encode('utf-8'):
                     msg = f'Данные в файле отличаются от ожидаемых {content}'
-                    runner.report_wa(f'{runner.test_name}/diff', None, 'resources/tmp/output', msg)
+                    runner._file_name()
+                    output_file = res.loc(f'output~{runner.current_log_id:02d}')
+                    shutil.copy(res.loc('output'), output_file.absolute())
+                    runner.report_wa(f'{runner.test_name}/diff', None, f'resources/tmp/{output_file.name}', msg)
                     pytest.fail(msg)
 
             cleanup(runner, process)

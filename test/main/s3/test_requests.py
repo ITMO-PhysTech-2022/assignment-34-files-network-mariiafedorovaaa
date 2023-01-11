@@ -1,7 +1,6 @@
-import re
-
 import pytest
 
+import re
 import json
 import random
 
@@ -9,7 +8,6 @@ from test.common.test import create, timeout, root_directory
 from test.common.mock.fs import tmpcd, tmpfile, tmpdir
 from test.main.process import spawn
 from test.main.base import config, cleanup
-from test.common.utils.primitives import random_line, random_word
 
 
 class TestRequests:
