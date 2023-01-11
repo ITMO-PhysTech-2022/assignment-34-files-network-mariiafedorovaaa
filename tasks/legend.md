@@ -566,13 +566,13 @@ $ send 127.0.0.1 60000
 скрипты:
 * в первом инстансе приложения
 ```
-$ set_str FILES ../resources/
+$ set_str PATH ../resources/
 $ set_int COUNT 10
 $ execute ../resources/scripts/receive.s
 ```
 * и во втором
 ```
-$ set_str FILES ../resources/tmp/
+$ set_str PATH ../resources/tmp/
 $ set_int COUNT 10
 $ execute ../resources/scripts/send.s
 ```
