@@ -210,10 +210,18 @@ def _cmd_set_cmd(name: str):
 def _cmd_set_eval(name: str):
     with pool.scope():
         command = pool.next()
-        main.vars[name] = eval(command.format(**main.var_formatter))
+        main.vars[name] = eval(command.format_map(main.var_formatter))
 
 
 def _cmd_get(name: str):
     if name not in main.vars:
         return main.report(f'Нет переменной с именем `{name}`')
     return main.vars[name]
+
+
+def _cmd_if_eval():
+    with pool.scope():
+        expression, command = pool.next(), pool.next()
+        value = eval(expression.format_map(main.var_formatter))
+        if value:
+            main.execute(pool.next())
