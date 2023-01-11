@@ -107,7 +107,7 @@ def _cmd_up():
 def _cmd_move(line: int, position: int):
     if line not in range(len(data)):
         return main.report('Некорректный номер строки')
-    if position not in range(len(data.line) + 1):
+    if position not in range(len(data[line]) + 1):
         return main.report(f'Некорректная позиция внутри строки')
 
     data.cursor = (line, position)
