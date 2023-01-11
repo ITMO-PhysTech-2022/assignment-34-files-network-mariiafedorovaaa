@@ -1,4 +1,5 @@
 import shutil
+import time
 
 import pytest
 
@@ -13,7 +14,7 @@ from test.common.utils.primitives import random_line
 
 
 class TestIO:
-    @pytest.mark.parametrize('d', [30, 5, 2, 1])
+    @pytest.mark.parametrize('d', [1, 2, 5, 30])
     def test_read(self, d):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file, \
@@ -36,7 +37,7 @@ class TestIO:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('d', [30, 5, 2, 1])
+    @pytest.mark.parametrize('d', [1, 2, 5, 30])
     def test_read_prefill(self, d):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file, \
@@ -63,7 +64,7 @@ class TestIO:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('d', [30, 5, 2, 1])
+    @pytest.mark.parametrize('d', [1, 2, 5, 30])
     def test_save(self, d):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file, \
@@ -87,6 +88,7 @@ class TestIO:
                     runner.manual('eval data.cursor', 1).returns([f'$  > ({y}, {x})\n'])
                 )
 
+            time.sleep(2)
             with res.loc('output').open('rb') as output:
                 actual = output.read().replace(b'\r', b'')
                 expect1 = '\n'.join(content)

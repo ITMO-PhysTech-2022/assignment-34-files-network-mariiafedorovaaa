@@ -24,7 +24,7 @@ class _TmpDir:
         if not self.keep:
             shutil.rmtree(self.clean)
 
-    def loc(self, *args: str) -> Path:
+    def loc(self, *args: str | os.PathLike) -> Path:
         return Path(self.path, *args)
 
 
@@ -57,8 +57,12 @@ class _TmpFile:
 
         def write(self, data: bytes | str, append: bool = False):
             mode = 'a' if append else 'w'
-            if isinstance(data, bytes): mode += 'b'
-            with open(self.path, mode, encoding='utf-8') as file:
+            kwargs = {}
+            if isinstance(data, bytes): 
+                mode += 'b'
+            else:
+                kwargs['encoding'] = 'utf-8'
+            with open(self.path, mode, **kwargs) as file:
                 file.write(data)
 
         def copy(self, from_path: str | os.PathLike):

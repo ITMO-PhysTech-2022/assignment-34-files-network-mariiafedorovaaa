@@ -42,7 +42,7 @@ class TestShow:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('d', [30, 5, 2])
+    @pytest.mark.parametrize('d', [2, 5, 30])
     def test_show_primitive(self, d):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
@@ -69,7 +69,7 @@ class TestShow:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('d', [4, 3, 2, 1])
+    @pytest.mark.parametrize('d', [1, 2, 3, 4])
     def test_show_no_cursor(self, d):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:

@@ -11,7 +11,7 @@ from test.common.utils.primitives import random_line
 
 
 class TestFind:
-    @pytest.mark.parametrize('lines', [1000, 100, 1])
+    @pytest.mark.parametrize('lines', [1, 30, 1000])
     def test_find_one(self, lines):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
@@ -35,7 +35,7 @@ class TestFind:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('lines', [1000, 100, 1])
+    @pytest.mark.parametrize('lines', [1, 30, 1000])
     def test_find_many(self, lines):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:

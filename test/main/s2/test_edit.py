@@ -47,7 +47,7 @@ class TestEdit:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('lines', [1000, 1])
+    @pytest.mark.parametrize('lines', [1, 1000])
     @pytest.mark.parametrize('xp', ['start', 'mid', 'end'])
     def test_newline(self, lines, xp):
         process = spawn()
@@ -80,7 +80,7 @@ class TestEdit:
 
             cleanup(runner, process)
 
-    @pytest.mark.parametrize('lines', [10000, 100, 1])
+    @pytest.mark.parametrize('lines', [1, 100, 10000])
     def test_type(self, lines):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
@@ -117,7 +117,7 @@ class TestEdit:
             cleanup(runner, process)
 
     @pytest.mark.parametrize('xp', [0b00, 0b01, 0b10, 0b11])
-    @pytest.mark.parametrize('lines', [1000, 7, 1])
+    @pytest.mark.parametrize('lines', [1, 30, 1000])
     def test_backspace(self, lines, xp):
         process = spawn()
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
