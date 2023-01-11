@@ -146,7 +146,7 @@ class Editor:
     @property
     def var_formatter(self):
         return Editor._SafeDict(
-            {name: self.vars.get(name) for name in self.active_vars}
+            {name: repr(self.vars.get(name)) for name in self.active_vars}
         )
 
     def execute(self, line: str, *, silent: bool = False):

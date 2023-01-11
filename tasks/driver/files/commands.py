@@ -224,4 +224,4 @@ def _cmd_if_eval():
         expression, command = pool.next(), pool.next()
         value = eval(expression.format_map(main.var_formatter))
         if value:
-            main.execute(pool.next())
+            main.execute(command)
