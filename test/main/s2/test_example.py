@@ -1,9 +1,6 @@
 import pytest
 
-import inspect
 import json
-import sys
-from decorator import decorator
 
 from test.common.test import create, timeout, root_directory
 from test.common.mock.fs import tmpcd, tmpfile

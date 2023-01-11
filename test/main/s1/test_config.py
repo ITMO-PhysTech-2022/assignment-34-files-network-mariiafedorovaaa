@@ -1,9 +1,6 @@
 import pytest
 
-import inspect
 import json
-import sys
-from decorator import decorator
 
 from test.common.test import create, timeout, root_directory
 from test.common.mock.fs import tmpcd, tmpfile
@@ -59,7 +56,7 @@ class TestConfig:
         with tmpcd(root_directory()), tmpfile('tasks/config.json') as config_file:
             config_file.write(json.dumps(config(False, -1, '$'), indent=2))
             show_src = 'lambda x, y: x, y'
-            
+
             with process:
                 spec_run = timeout(process.handler, 3)
                 spec_run.__name__ = 'run.cursor.home-show'
