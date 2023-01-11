@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import time
-
 import pytest
 
 import os
@@ -10,6 +8,7 @@ import inspect
 from subprocess import Popen, PIPE
 
 import re
+from typing import Callable
 
 from test.common.mock.fs import tmpcd, tmpfile
 from test.common.test import root_directory, timeout
@@ -80,6 +79,13 @@ class Process:
     def handler(self, command: str, expect_lines: int):
         self.write(command + '\n')
         return self.read(expect_lines)
+
+    def custom_handler(self, callback: Callable):
+        def _handle(command: str, expect_lines: int):
+            result = self.handler(command, expect_lines)
+            return callback(result)
+
+        return _handle
 
     def wait(self):
         self.process.wait()
