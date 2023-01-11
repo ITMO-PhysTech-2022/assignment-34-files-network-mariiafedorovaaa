@@ -1,13 +1,13 @@
 use LINES LINE
     macro COUNT
-        set_from LINES
+        set_cmd LINES
             total
         set_eval LINES
             {LINES}[0]
         stop
         
     macro LINE
-        set_from LINE
+        set_cmd LINE
             cursor
         set_eval LINE
             {LINE}[0]

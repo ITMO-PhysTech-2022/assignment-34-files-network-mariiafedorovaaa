@@ -1,6 +1,6 @@
 use LINES
     macro COUNT
-        set_from LINES
+        set_cmd LINES
             total
         set_eval LINES
             {LINES}[0]
