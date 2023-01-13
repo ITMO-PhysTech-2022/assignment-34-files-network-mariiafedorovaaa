@@ -1,7 +1,8 @@
 name: '2.script::test_dev'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_script.py'
       - '.github/workflows/script$dev.yaml'

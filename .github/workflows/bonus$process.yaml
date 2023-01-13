@@ -1,7 +1,8 @@
 name: '2.bonus::test_process'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_bonus.py'
       - '.github/workflows/bonus$process.yaml'

@@ -1,7 +1,8 @@
 name: '2.io::test_save'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_io.py'
       - '.github/workflows/io$save.yaml'

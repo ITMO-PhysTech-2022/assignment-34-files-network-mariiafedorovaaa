@@ -1,7 +1,8 @@
 name: '1.config::test_display'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s1/test_config.py'
       - '.github/workflows/config$display.yaml'

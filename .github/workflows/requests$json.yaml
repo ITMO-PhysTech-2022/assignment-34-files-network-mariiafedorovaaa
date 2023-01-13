@@ -1,7 +1,8 @@
 name: '3.requests::test_json'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s3/test_requests.py'
       - '.github/workflows/requests$json.yaml'

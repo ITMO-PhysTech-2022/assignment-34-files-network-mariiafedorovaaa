@@ -1,7 +1,8 @@
 name: '2.show::test_default'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_show.py'
       - '.github/workflows/show$default.yaml'

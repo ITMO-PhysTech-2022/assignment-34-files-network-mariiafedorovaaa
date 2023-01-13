@@ -1,7 +1,8 @@
 name: '2.example::test_example'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_example.py'
       - '.github/workflows/example$example.yaml'

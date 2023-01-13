@@ -1,7 +1,8 @@
 name: '2.find::test_find_many'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_find.py'
       - '.github/workflows/find$find_many.yaml'

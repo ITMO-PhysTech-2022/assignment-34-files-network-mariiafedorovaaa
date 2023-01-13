@@ -1,7 +1,8 @@
 name: '3.sockets::test_send_receive'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s3/test_sockets.py'
       - '.github/workflows/sockets$send_receive.yaml'

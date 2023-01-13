@@ -1,7 +1,8 @@
 name: '1.runs::test_runs'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s1/test_runs.py'
       - '.github/workflows/runs$runs.yaml'

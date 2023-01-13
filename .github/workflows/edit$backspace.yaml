@@ -1,7 +1,8 @@
 name: '2.edit::test_backspace'
 
 on:
-  push:
+  pull-request:
+    types: [ opened, edited, synchronize ]
     paths:
       - './tests/main/s2/test_edit.py'
       - '.github/workflows/edit$backspace.yaml'
