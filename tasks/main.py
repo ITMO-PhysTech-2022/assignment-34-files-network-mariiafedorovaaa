@@ -5,9 +5,13 @@ from tasks.driver import COMMANDS
 
 # --------------- Задание 1.1 --------------- #
 
-DISPLAY = ...
-DISPLAY_MARGIN = ...
-PREFIX = ...
+l = []
+with open("config.json", encoding="utf-8") as utu:
+    l = json.loads(utu.read())
+utu.close()
+DISPLAY = l.get('display').get('show')
+DISPLAY_MARGIN = l.get('display').get('margin')
+PREFIX = l.get('prefix')
 
 
 if __name__ == '__main__':
