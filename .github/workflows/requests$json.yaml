@@ -1,0 +1,29 @@
+name: '3.requests::test_json'
+
+on:
+  push:
+    paths:
+      - './tests/main/s3/test_requests.py'
+      - '.github/workflows/requests$json.yaml'
+  workflow_dispatch:
+
+jobs:
+  test-json:
+    timeout-minutes: 1
+    name: 'test-json'
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pytest decorator requests
+      - run: |
+          pytest ./tests/main/s3/test_requests.py::TestRequests.py::test_json

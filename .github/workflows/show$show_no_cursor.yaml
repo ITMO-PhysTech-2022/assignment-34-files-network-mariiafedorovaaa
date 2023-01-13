@@ -1,0 +1,29 @@
+name: '2.show::test_show_no_cursor'
+
+on:
+  push:
+    paths:
+      - './tests/main/s2/test_show.py'
+      - '.github/workflows/show$show_no_cursor.yaml'
+  workflow_dispatch:
+
+jobs:
+  test-show_no_cursor:
+    timeout-minutes: 1
+    name: 'test-show_no_cursor'
+    runs-on: [ self-hosted ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pytest decorator requests
+      - run: |
+          pytest ./tests/main/s2/test_show.py::TestShow.py::test_show_no_cursor
