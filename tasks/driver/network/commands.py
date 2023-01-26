@@ -1,4 +1,4 @@
-from __future__ import annotations
+from future import annotations
 
 import os
 import sys
@@ -17,6 +17,12 @@ def _cmd_request(url: str):
     file = open('data', 'w')
     file.write(r)
 
+    # TODO реализуйте заполнение data результатом HTTP-запроса
+    data.lines = requests.get(url).text.splitlines()
+    data.cursor = (0,0)
+
+
+
 
 # --------------- Задание 3.2 --------------- #
 
@@ -29,7 +35,7 @@ def _cmd_await_receive(port: int):
         main.report(f'Connected from {addr}')
 
         with conn:
-            # TODO реализуйте получение данных файла и сохранения его в `data`
+            # TODO реализуйте получение данных файла и сохранения его в data
             conn.sendall(b'Ok')
             file = open('data', 'w')
             a = сonn.recv()
@@ -42,7 +48,10 @@ def _cmd_send(host: str, port: int):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
         client.connect((host, port))
 
-        # TODO реализуйте отправку данных из `data`
+        # TODO реализуйте отправку данных из data
+
+        file = open('data', 'r')
+        client.send(file)
 
         file = open('data', 'r')
         client.send(file)

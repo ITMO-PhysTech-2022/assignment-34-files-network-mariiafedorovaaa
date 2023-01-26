@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import os
@@ -183,6 +184,7 @@ def _cmd_find():
 
 # --------------- Задание 2.5 --------------- #
 
+
 def _cmd_macro(name: str):
     script = []
     with pool.scope():
@@ -196,7 +198,7 @@ def _cmd_macro(name: str):
 
 def _cmd_repeat(macro: str, times: int):
     if macro not in main.macros:
-        return main.report(f'Нет макро с именем `{macro}`')
+        return main.report(f'Нет макро с именем {macro}')
 
     for _ in range(times):
         pool.put(main.macros[macro])
@@ -205,6 +207,8 @@ def _cmd_repeat(macro: str, times: int):
 def _cmd_execute(filename: str):
     if not os.path.exists(filename):
         return main.report(f'Файл `{filename}` не существует')
+
+        return main.report(f'Файл {filename} не существует')
     t = open(filename).readlines()
     for i in range(len(t)):
         t[i].lstrip()
@@ -244,7 +248,7 @@ def _cmd_set_eval(name: str):
 
 def _cmd_get(name: str):
     if name not in main.vars:
-        return main.report(f'Нет переменной с именем `{name}`')
+        return main.report(f'Нет переменной с именем {name}')
     return main.vars[name]
 
 

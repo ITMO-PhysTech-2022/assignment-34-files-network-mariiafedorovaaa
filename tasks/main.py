@@ -14,7 +14,7 @@ DISPLAY_MARGIN = l.get('display').get('margin')
 PREFIX = l.get('prefix')
 
 
-if __name__ == '__main__':
+if name == 'main':
     main.configure(
         display=DISPLAY,
         display_margin=DISPLAY_MARGIN,
