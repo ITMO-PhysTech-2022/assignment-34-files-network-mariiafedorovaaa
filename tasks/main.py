@@ -5,7 +5,6 @@ from tasks.driver import COMMANDS
 
 # --------------- Задание 1.1 --------------- #
 
-l = []
 with open("config.json", encoding="utf-8") as utu:
     l = json.loads(utu.read())
 utu.close()
